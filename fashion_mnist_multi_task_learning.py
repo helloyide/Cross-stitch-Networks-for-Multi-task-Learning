@@ -1,13 +1,4 @@
 #
-# solo: got about 87% test acc for original labels
-# solo: got about 92% test acc for new labels
-#
-# both: got about 91% test acc for both labels
-# both: got about 91% test acc for both labels with cross stitch
-#
-# CNN both: got about 93% test acc for both labels
-# CNN both: got about 93% test acc for both labels with cross stitch
-#
 # fashion_mnist labels:
 # Label	Description
 # 0	T-shirt/top
