@@ -71,6 +71,8 @@ The network will train two classifiers together, given an image it should classi
  
  ## Evaluation
  The accuracy is calculated by averaging the accuracies of two classification tasks. With cross stitch transformation it get about 2% improvement on test dataset.
+ 
+ Orange: without sharing. Blue: with cross stitch.
  ![test accuracy](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/acc_test.png)
  ![total loss](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/total_loss.png)
   
