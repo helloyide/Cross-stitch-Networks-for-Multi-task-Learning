@@ -4,7 +4,6 @@ from datetime import datetime
 import numpy as np
 import tensorflow as tf
 import tensorflow.contrib as contrib
-import tensorflow.contrib.slim as slim
 from keras.utils import to_categorical
 
 # train_X: (60000, 28, 28)
@@ -55,13 +54,15 @@ test_y_2 = to_categorical(test_y_2, n_class_2)
 m = train_X.shape[0]
 n_output_1 = n_class_1
 n_output_2 = n_class_2
-lr = 0.001
-n_epoch = 300
+learning_rate_init = 0.001
+learning_rate_decay_steps = 10000
+learning_rate_decay_rate = 1 / 10
+n_epoch = 1400
 n_batch_size = 128
 reg_lambda = 1e-5
 keep_prob = 0.8
 
-cross_stitch_enabled = False
+cross_stitch_enabled = True
 
 with tf.variable_scope("placeholder"):
     X = tf.placeholder(tf.float32, (None, 128), "X")
@@ -149,6 +150,7 @@ with tf.variable_scope("evaluation"):
 
 with tf.variable_scope("train"):
     global_step = tf.get_variable("global_step", shape=(), dtype=tf.int32, trainable=False)
+    lr = tf.train.exponential_decay(learning_rate_init, global_step, learning_rate_decay_steps, learning_rate_decay_rate)
     train_op = tf.train.AdamOptimizer(learning_rate=lr).minimize(loss_total, global_step=global_step)
 
 with tf.variable_scope("summary"):
