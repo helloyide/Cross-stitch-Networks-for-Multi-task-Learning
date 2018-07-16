@@ -54,12 +54,10 @@ test_y_2 = to_categorical(test_y_2, n_class_2)
 m = train_X.shape[0]
 n_output_1 = n_class_1
 n_output_2 = n_class_2
-learning_rate_init = 0.001
-learning_rate_decay_steps = 10000
-learning_rate_decay_rate = 1 / 10
-n_epoch = 1400
+learning_rate_init = 0.0003
+n_epoch = 900
 n_batch_size = 128
-reg_lambda = 1e-5
+reg_lambda = 1e-4
 keep_prob = 0.8
 
 cross_stitch_enabled = True
@@ -109,29 +107,34 @@ with tf.variable_scope("network"):
             }
     ):
 
-        fc1_1 = contrib.layers.fully_connected(X, 128, scope="fc1_1")
-        fc1_2 = contrib.layers.fully_connected(X, 128, scope="fc1_2")
+        fc1_1 = contrib.layers.fully_connected(X, 32, scope="fc1_1")
+        fc1_2 = contrib.layers.fully_connected(X, 32, scope="fc1_2")
 
         with tf.variable_scope("cross_stitch_1"):
             stitch1_1, stitch1_2 = apply_cross_stitch(fc1_1, fc1_2)
 
-        fc2_1 = contrib.layers.fully_connected(stitch1_1, 128, scope="fc2_1")
-        fc2_2 = contrib.layers.fully_connected(stitch1_2, 128, scope="fc2_2")
+        fc2_1 = contrib.layers.fully_connected(stitch1_1, 32, scope="fc2_1")
+        fc2_2 = contrib.layers.fully_connected(stitch1_2, 32, scope="fc2_2")
 
         with tf.variable_scope("cross_stitch_2"):
             stitch2_1, stitch2_2 = apply_cross_stitch(fc2_1, fc2_2)
 
-        fc3_1 = contrib.layers.fully_connected(stitch2_1, 128, scope="fc3_1")
-        fc3_2 = contrib.layers.fully_connected(stitch2_2, 128, scope="fc3_2")
+        dropout2_1 = contrib.layers.dropout(stitch2_1, keep_prob=keep_prob, is_training=is_training,
+                                            scope="dropout2_1")
+        dropout2_2 = contrib.layers.dropout(stitch2_2, keep_prob=keep_prob, is_training=is_training,
+                                            scope="dropout2_2")
+
+        fc3_1 = contrib.layers.fully_connected(dropout2_1, 32, scope="fc3_1")
+        fc3_2 = contrib.layers.fully_connected(dropout2_2, 32, scope="fc3_2")
 
         with tf.variable_scope("cross_stitch_3"):
             stitch3_1, stitch3_2 = apply_cross_stitch(fc3_1, fc3_2)
 
-        dropout_1 = contrib.layers.dropout(stitch3_1, keep_prob=keep_prob, is_training=is_training, scope="dropout_1")
-        dropout_2 = contrib.layers.dropout(stitch3_2, keep_prob=keep_prob, is_training=is_training, scope="dropout_2")
+        dropout3_1 = contrib.layers.dropout(stitch3_1, keep_prob=keep_prob, is_training=is_training, scope="dropout3_1")
+        dropout3_2 = contrib.layers.dropout(stitch3_2, keep_prob=keep_prob, is_training=is_training, scope="dropout3_2")
 
-        output_1 = contrib.layers.fully_connected(dropout_1, n_output_1, activation_fn=None, scope="output_1")
-        output_2 = contrib.layers.fully_connected(dropout_2, n_output_2, activation_fn=None, scope="output_2")
+        output_1 = contrib.layers.fully_connected(dropout3_1, n_output_1, activation_fn=None, scope="output_1")
+        output_2 = contrib.layers.fully_connected(dropout3_2, n_output_2, activation_fn=None, scope="output_2")
 
 with tf.variable_scope("loss"):
     loss_base_1 = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_1, logits=output_1))
@@ -150,8 +153,7 @@ with tf.variable_scope("evaluation"):
 
 with tf.variable_scope("train"):
     global_step = tf.get_variable("global_step", shape=(), dtype=tf.int32, trainable=False)
-    lr = tf.train.exponential_decay(learning_rate_init, global_step, learning_rate_decay_steps, learning_rate_decay_rate)
-    train_op = tf.train.AdamOptimizer(learning_rate=lr).minimize(loss_total, global_step=global_step)
+    train_op = tf.train.AdamOptimizer(learning_rate=learning_rate_init).minimize(loss_total, global_step=global_step)
 
 with tf.variable_scope("summary"):
     summary_loss_total = tf.summary.scalar("loss_total", loss_total)
@@ -223,9 +225,9 @@ with tf.Session() as sess, tf.summary.FileWriter(
             if global_step_value % 100 == 0:
                 accuracy_train_value, summary_accuracy_train_value = \
                     sess.run([accuracy, summary_accuracy_train],
-                             feed_dict={X: standardization(train_X_batch),
-                                        y_1: train_y_batch_1,
-                                        y_2: train_y_batch_2,
+                             feed_dict={X: standardization(train_X),
+                                        y_1: train_y_1,
+                                        y_2: train_y_2,
                                         is_training: False})
                 accuracy_test_value, summary_accuracy_test_value = \
                     sess.run([accuracy, summary_accuracy_test],
