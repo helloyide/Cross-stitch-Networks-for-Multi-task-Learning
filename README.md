@@ -83,11 +83,18 @@ TODO
 * Trained 30 epochs with batch size = 128
 
 ## Evaluation
-The overall accuracy is calculated by averaging the accuracies of sub tasks. With cross stitch transformation it gets more than 1% improvement on test dataset.
+
+The overall accuracy is calculated by averaging the accuracies of sub tasks. 
+
+### Fashion-MNIST
+With cross stitch transformation it gets more than 1% improvement on test dataset.
 
 Orange: without sharing. Blue: with cross stitch.
 ![test accuracy](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/acc_test.png)
 ![total loss](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/total_loss.png)
+
+### VGGFace2
+TODO
 
 ## Result
 In general cross stitch improves the accuracy as expect. Although this project only trained with two tasks but it can be extended to more tasks easily. 
