@@ -70,7 +70,7 @@ The convolutional sub networks have the same architecture as above. As in paper 
 
 ### VGGFace2
 
-The inputs are facial feature vectors, which are actually the output of the last fully connected layer in the face recognition convolutional neural network. So here I built a network only with fully connnected layers. It has 2 sub networks and each has 3 layers with 32 neurons, they last two layers have dropout included.
+The inputs are facial feature vectors, which are actually the output of the last fully connected layer in the face recognition convolutional neural network. So here I built a network only with fully connnected layers. It has 2 sub networks and each has 3 layers with 32 neurons, last two layers have dropout.
 
 Here is an overview of the structure with cross stitch:
 
@@ -90,7 +90,7 @@ Here is an overview of the structure with cross stitch:
 
 ## Evaluation
 
-The overall accuracy is calculated by averaging the accuracies of sub tasks. 
+The overall accuracy is calculated by averaging the accuracies of all sub tasks. 
 
 ### Fashion-MNIST
 
@@ -106,6 +106,6 @@ With cross stitch transformation it gets about 2% improvement on test dataset.
 
 ## Result
 
-For Fashion-MNIST new labels are created based on the original labels, i.e. two tasks are highly related. For VGGFace2 labels are more independent. In both test cross stitch improved the test accuracy. Although this project only trained with two tasks but it can be extended to more tasks easily. 
+For Fashion-MNIST new labels are created based on the original labels, so two classification tasks are highly related. For VGGFace2 labels are more independent. In both tests cross stitch improves the accuracy. Although this project only trained with two tasks but it can be extended to more tasks easily.
 
-I didn't pretrain the sub networks as in paper suggested and I also used a different initialization strategy. A better result might be found with more tuning.    
+I didn't pretrain the sub networks as in paper suggested and I also used a different initialization strategy. A better result might be found with more tuning.
