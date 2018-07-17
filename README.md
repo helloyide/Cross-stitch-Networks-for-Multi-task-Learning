@@ -1,7 +1,7 @@
 # Cross-stitch-Networks-for-Multi-task-Learning
 
-This project is a TensorFlow implementation of Multi Task Learning described in the paper
-[Cross-stitch Networks for Multi-task Learning](https://arxiv.org/abs/1604.03539).
+This project is a TensorFlow implementation of a Multi Task Learning method described in the paper
+[Cross-stitch Networks for Multi-task Learning](https://arxiv.org/abs/1604.03539). It's trained and tested with two small datasets, one has highly relevant labels, the other not.
 
 ## Dataset
 
