@@ -9,7 +9,7 @@ This project is a TensorFlow implementation of a Multi Task Learning method desc
 * --n_epoch, number of epoch
 * --n_batch_size, mini batch size
 * --reg_lambda, L2 regularization lambda
-* --keep_prob, Dropout keep probablity
+* --keep_prob, Dropout keep probability
 * --cross_stitch_enabled, Use Cross Stitch or not
 
 ## Dataset
