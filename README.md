@@ -3,6 +3,15 @@
 This project is a TensorFlow implementation of a Multi Task Learning method described in the paper
 [Cross-stitch Networks for Multi-task Learning](https://arxiv.org/abs/1604.03539). It's trained and tested with two small datasets, one has highly relevant labels, the other not.
 
+## Arguments
+
+* --lr, learning rate
+* --n_epoch, number of epoch
+* --n_batch_size, mini batch size
+* --reg_lambda, L2 regularization lambda
+* --keep_prob, Dropout keep probability
+* --cross_stitch_enabled, Use Cross Stitch or not
+
 ## Dataset
 
 ### Fashion-MNIST
