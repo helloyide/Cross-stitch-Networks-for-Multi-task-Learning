@@ -267,12 +267,12 @@ def main(args):
 def parse_args(argv):
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--lr", help="learning rate", default=0.001)
-    parser.add_argument("--n_epoch", help="number of epoch", default=30)
-    parser.add_argument("--n_batch_size", help="mini batch size", default=128)
-    parser.add_argument("--reg_lambda", help="L2 regularization lambda", default=1e-5)
-    parser.add_argument("--keep_prob", help="Dropout keep probability", default=0.8)
-    parser.add_argument("--cross_stitch_enabled", help="Use Cross Stitch or not", default=True)
+    parser.add_argument("--lr", type=float, help="learning rate", default=0.001)
+    parser.add_argument("--n_epoch", type=int, help="number of epoch", default=30)
+    parser.add_argument("--n_batch_size", type=int, help="mini batch size", default=128)
+    parser.add_argument("--reg_lambda", type=float, help="L2 regularization lambda", default=1e-5)
+    parser.add_argument("--keep_prob", type=float, help="Dropout keep probability", default=0.8)
+    parser.add_argument("--cross_stitch_enabled", type=bool, help="Use Cross Stitch or not", default=True)
 
     return parser.parse_args(argv)
 
