@@ -81,9 +81,9 @@ def main(args):
 
     with tf.variable_scope("placeholder"):
         X = tf.placeholder(tf.float32, (None, 128), "X")
-    y_1 = tf.placeholder(tf.float32, (None, n_output_1), "y_1")
-    y_2 = tf.placeholder(tf.float32, (None, n_output_2), "y_2")
-    is_training = tf.placeholder(tf.bool, (), "is_training")
+        y_1 = tf.placeholder(tf.float32, (None, n_output_1), "y_1")
+        y_2 = tf.placeholder(tf.float32, (None, n_output_2), "y_2")
+        is_training = tf.placeholder(tf.bool, (), "is_training")
 
     with tf.variable_scope("network"):
         with contrib.framework.arg_scope(
@@ -157,8 +157,7 @@ def main(args):
 
     with tf.variable_scope("train"):
         global_step = tf.get_variable("global_step", shape=(), dtype=tf.int32, trainable=False)
-        train_op = tf.train.AdamOptimizer(learning_rate=lr).minimize(loss_total,
-                                                                     global_step=global_step)
+        train_op = tf.train.AdamOptimizer(learning_rate=lr).minimize(loss_total, global_step=global_step)
 
     with tf.variable_scope("summary"):
         summary_loss_total = tf.summary.scalar("loss_total", loss_total)
@@ -166,14 +165,14 @@ def main(args):
         summary_accuracy_train = tf.summary.scalar("accuracy_train", accuracy)
 
     # standardization
-    train_x_reshaped = train_X.reshape([train_X.shape[0], -1])
-    train_X_means = np.mean(train_x_reshaped, axis=0, keepdims=True)
-    train_X_stds = np.std(train_x_reshaped, axis=0, keepdims=True)
+    train_X_reshaped = train_X.reshape([train_X.shape[0], -1])
+    train_X_means = np.mean(train_X_reshaped, axis=0, keepdims=True)
+    train_X_stds = np.std(train_X_reshaped, axis=0, keepdims=True)
 
-    def standardization(X):
-        X_reshaped = X.reshape([X.shape[0], -1])
-        result = (X_reshaped - train_X_means) / (train_X_stds + 1e-9)
-        return result.reshape(X.shape)
+    def standardization(x):
+        x_reshaped = x.reshape([x.shape[0], -1])
+        result = (x_reshaped - train_X_means) / (train_X_stds + 1e-9)
+        return result.reshape(x.shape)
 
     normalized_test_X = standardization(test_X)
 
