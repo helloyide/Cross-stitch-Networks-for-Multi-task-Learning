@@ -10,10 +10,6 @@ from keras.utils import to_categorical
 
 
 def load_data():
-    # train_X: (60000, 28, 28)
-    # train_y: (60000,)
-    # test_X: (10000, 28, 28)
-    # test_y: (10000,)
     with open("saved_data", "rb") as file:
         # data is a list with length 2000
         # elements are {
@@ -22,11 +18,18 @@ def load_data():
         #   'age_young': bool
         #   'embedding': ndarray with shape (128,) dtype float64
         # }
-        data = pickle.load(file)
+        data = np.array(pickle.load(file))
+    with open("saved_data_flip", "rb") as file:
+        data_flip = np.array(pickle.load(file))
+
     np.random.seed(1)
-    np.random.shuffle(data)
-    test = data[:200]
-    train = data[200:]
+    random_index = np.random.permutation(len(data))
+    test_index = random_index[:200]
+    train_index = random_index[200:]
+
+    test = np.append(data[test_index], data_flip[test_index])
+    train = np.append(data[train_index], data_flip[train_index])
+
     train_X = np.array([t["embedding"] for t in train])
     test_X = np.array([t["embedding"] for t in test])
     n_class_1 = 2
@@ -35,10 +38,10 @@ def load_data():
     n_class_2 = 2
     train_y_2 = [1 if t["age_young"] else 0 for t in train]
     test_y_2 = [1 if t["age_young"] else 0 for t in test]
-    # train_X: (1800, 128)
-    # test_X: (200, 128)
-    # train_y: (1800, n_class)
-    # test_y: (200, n_class)
+    # train_X: (3600, 128)
+    # train_y: (3600, n_class)
+    # test_X: (400, 128)
+    # test_y: (400, n_class)
     train_y_1 = to_categorical(train_y_1, n_class_1)
     test_y_1 = to_categorical(test_y_1, n_class_1)
     train_y_2 = to_categorical(train_y_2, n_class_2)
@@ -251,9 +254,9 @@ def parse_args(argv):
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--lr", type=float, help="learning rate", default=0.0003)
-    parser.add_argument("--n_epoch", type=int, help="number of epoch", default=900)
+    parser.add_argument("--n_epoch", type=int, help="number of epoch", default=800)
     parser.add_argument("--n_batch_size", type=int, help="mini batch size", default=128)
-    parser.add_argument("--reg_lambda", type=float, help="L2 regularization lambda", default=1e-4)
+    parser.add_argument("--reg_lambda", type=float, help="L2 regularization lambda", default=1e-3)
     parser.add_argument("--keep_prob", type=float, help="Dropout keep probability", default=0.8)
     parser.add_argument("--cross_stitch_enabled", type=bool, help="Use Cross Stitch or not", default=True)
 
