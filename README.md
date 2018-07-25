@@ -1,7 +1,7 @@
 # Cross-stitch-Networks-for-Multi-task-Learning
 
 This project is a TensorFlow implementation of a Multi Task Learning method described in the paper
-[Cross-stitch Networks for Multi-task Learning](https://arxiv.org/abs/1604.03539). It's trained and tested with two small datasets, one has highly relevant labels, the other not.
+[Cross-stitch Networks for Multi-task Learning](https://arxiv.org/abs/1604.03539). 
 
 ## Arguments
 
@@ -38,9 +38,7 @@ The network will train these two classifiers together.
 
 ## Network
 
-### Fashion-MNIST
-
-#### Without task sharing
+### Without task sharing
 
 As a baseline, a network without cross stitch is built, which simply concats two convolutional neural networks side by side. Each network is for one task, although their parameters are not shared. The final loss function is the sum of two loss functions of sub networks.
 
@@ -59,7 +57,7 @@ Both sub convolutional neural networks have the same architecture:
 |fc_3|1024||
 |output|10 or 3 depends on task||
 
-#### With Cross Stitch
+### With Cross Stitch
 
 Cross Stitch is a transformation applied between layers, it describes the relationship between different tasks with a linear combination of their activations. 
 
@@ -72,15 +70,6 @@ Here is an overview of this structure:
 ![Network strcture with Cross Stitch](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/network_with.png)
 
 The convolutional sub networks have the same architecture as above. As in paper suggested the cross stitch units are only added after Pool layers and Fully Connected layers.
-
-### VGGFace2
-
-The inputs are facial feature vectors, which are actually the output of the last fully connected layer in the face recognition convolutional neural network. So here I built a network only with fully connnected layers. It has 2 sub networks and each has 3 layers with 32 neurons, last two layers have dropout.
-
-Here is an overview of the structure with cross stitch:
-
-![Network strcture with Cross Stitch](https://raw.githubusercontent.com/helloyide/Cross-stitch-Networks-for-Multi-task-Learning/master/img/age_gender_network.png)
-
 
 ## Training
 
@@ -96,8 +85,6 @@ Here is an overview of the structure with cross stitch:
 ## Evaluation
 
 The overall accuracy is calculated by averaging the accuracies of all sub tasks. 
-
-### Fashion-MNIST
 
 With cross stitch transformation it gets more than 1% improvement on test dataset.
 
